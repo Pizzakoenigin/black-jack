@@ -1,0 +1,46 @@
+:root {
+    /* --squareWidth: 2em; */
+}
+
+body {
+    font-family: sans-serif;
+}
+
+input:invalid {
+    border: 3px solid red;
+  }
+
+.container {
+    
+
+}
+
+.playersCards {
+    background-color: rgba(255, 228, 165, 0.04);
+    min-height: 20vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1em
+}
+
+.card {
+    width: calc(63mm/4);
+    height: calc(88mm/4);
+    background: url(backsideCard.jpg);
+    background-size: contain;
+}
+
+.cardArea {
+    border: 1px solid rgb(165, 165, 165);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.square {
+
+    /* border: rgb(255, 255, 255) solid 1px */
+}
+
+input {
+}
