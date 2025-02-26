@@ -13,7 +13,7 @@ function init() {
 function createRandomDeck() {
     let cardDeck = [];
     let colorType = ['spades', 'clubs', 'hearts', 'diamonds'];
-    let symbols = { '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jake': 11, 'queen': 12, 'king': 13, 'ace': 10 };
+    let symbols = { 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10, 'jack': 11, 'queen': 12, 'king': 13, 'ace': 10 };
 
 
     colorType.forEach((color) => {
@@ -103,15 +103,28 @@ function playRound(currentDeck, players) {
     document.querySelector('.cardDeck').addEventListener('click', () => {
         players[indexPlayer].hand.push(currentDeck.pop())
 
-        //createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', 'card', false).style.background = `url(${players[indexPlayer].hand[players[indexPlayer].hand.length-1].value}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}.png) `        
+        let selectorCurrentCard = players[indexPlayer].hand[players[indexPlayer].hand.length-1]
 
-        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`, false)
-        console.log(`${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`);
+
+        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)        
         
-        document.querySelector(`.${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`).style.background = `url('cards/${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}.png')`
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`).classList.add('card')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`).classList.add('card-inner')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`).classList.add('card-back')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`).classList.add('card-front')
+        
+        let backside = `.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`
+        document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
+
+        //console.log(document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`));
+        
+        
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
-        } else {
+        } else {    
             indexPlayer = 0;
         }
         addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)

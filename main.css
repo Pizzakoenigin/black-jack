@@ -36,27 +36,94 @@ input:invalid {
 .cardDeck {
     width: calc(63mm/2);
     height: calc(88mm/2);
-    background: url(backsideCard.jpg);
+    background: url(cards/backsideCard.jpg);
     border-radius: 0.5em;
     background-size: contain; 
     color: rgb(0, 0, 0);   
     font-size: 2em;
     text-shadow: 2px 2px rgb(252, 252, 252);
+    border: none;
+    filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
+}
+
+.cardDeck:hover {
+    transform: perspective(1500px ) rotateY(20deg);
+
 }
 
 .card {
+    background-color: transparent;
+    perspective: 1000px;
+    width: calc(63mm/2);
+    height: calc(88mm/2);
+}
 
-    
+.card-inner{
+        position: relative;
+        width: calc(63mm/2);
+        height: calc(88mm/2);
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        background-size: contain;  
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+
+.card-front {
+    background: url(cards/backsideCard.jpg);
+
+    background-size: contain;  
+}
+
+  .card-front, .card-back {
+    position: absolute;
+    width: calc(63mm/2);
+    height: calc(88mm/2);
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    border-radius: 0.5em;
+    background-size: contain;     
+  }
+  
+  /* Style the front side (fallback if image is missing) */
+  .flip-card-front {
+    /* background-color: #bbb;
+    color: black; */
+  }
+  
+  /* Style the back side */
+  .card-back {
+    /* background-color: dodgerblue;
+    color: white; */
+    transform: rotateY(180deg);
+
+ 
+    border-radius: 0.5em;
+    background-size: contain !important; 
+    background-repeat: no-repeat !important;
+
+  }
+
+
+/* .card-back {
+    width: calc(63mm/2);
+    height: calc(88mm/2);
+    background: url(cards/backsideCard.jpg);
+    border-radius: 0.5em;
+    background-size: contain; 
     transform: perspective(1500px ) rotateY(0deg);
     filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
     transition: transform 0.5s ease 0s;
     border: 1px solid rgba(165, 165, 165, 0.4);
 }
 
-.card:hover {
+.card-back:hover {
     transform: perspective(1500px ) rotateY(20deg);
 
-}
+} */
 
 
 .square {
