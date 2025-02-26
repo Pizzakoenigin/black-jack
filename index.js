@@ -22,7 +22,7 @@ function createRandomDeck() {
                 colorType: color,
                 symbol: key,
                 value: symbols[key],
-                sortIndex: Math.random()
+                sortIndex: Math.random(),
             };
             cardDeck.push(card);
         }
@@ -102,9 +102,13 @@ function playRound(currentDeck, players) {
 // jeder Spieler der nicht aufgehört hat hat die Möglichkeit eine Karte zu ziehen
     document.querySelector('.cardDeck').addEventListener('click', () => {
         players[indexPlayer].hand.push(currentDeck.pop())
-        console.log(players[indexPlayer].name);
+
+        //createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', 'card', false).style.background = `url(${players[indexPlayer].hand[players[indexPlayer].hand.length-1].value}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}.png) `        
+
+        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`, false)
+        console.log(`${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`);
         
-        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', 'card', false)
+        document.querySelector(`.${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}`).style.background = `url('cards/${players[indexPlayer].hand[players[indexPlayer].hand.length-1].symbol}_of_${players[indexPlayer].hand[players[indexPlayer].hand.length-1].colorType}.png')`
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
         } else {
