@@ -92,12 +92,14 @@ function playRound(currentDeck, players) {
     createDOMElement('.playfield', 'button', 'cardDeck', false);
     createDOMElement('.playfield', 'p', 'cardDeckLabel', 'draw a card')
     createDOMElement('.playfield', 'button', 'endRound', "don't draw a card and leave hand")
+    createDOMElement('.playfield', 'button', 'restart', "restart")
     createDOMElement('.playfield', 'p', 'currentPlayer', `it's ${players[indexPlayer].name}'s turn`);
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
     players.forEach ((player) => {
         createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
         document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
+        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has no points yet`) 
     })
 // solange mindests ein Spieler eine Runde spielen will do while
 // jeder Spieler der nicht aufgehört hat hat die Möglichkeit eine Karte zu ziehen
@@ -122,7 +124,9 @@ function playRound(currentDeck, players) {
 
         //console.log(document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`));
         
-        
+        checkForWinner(players)
+
+
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
         } else {    
@@ -142,26 +146,40 @@ function playRound(currentDeck, players) {
 // Gewinner bekommt einen Punkt und Jubel
 
     document.querySelector('.endRound').addEventListener('click', () => {
-        players.forEach((player) => {
-            player.sum = 0
-            player.hand.forEach((card) => {
-                player.sum = player.sum + card.value
-            })
-            if (player.sum <= 21) {
-               createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points `) 
-            }
-            if (player.sum > 21) {
-                createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost `) 
-            }
-        })
-
-
+        checkForWinner(players)
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
         } else {
             indexPlayer = 0;
         }
     })
+    
+
+    document.querySelector('.restart').addEventListener('click', () => {
+        document.querySelector('body').innerHTML = ''
+        currentDeck = createRandomDeck();
+        players.forEach (       player =>        {
+            player.hand = []
+        }     )
+        playRound(currentDeck, players)
+    })
+
+
+    function checkForWinner(players) {
+        players.forEach((player) => {
+            player.sum = 0
+            player.hand.forEach((card) => {
+                player.sum = player.sum + card.value
+            })
+            if (player.sum <= 21) {
+               document.querySelector(`.currentScore${player.name}`).textContent =  `${player.name} has ${player.sum} points.`
+            }
+            if (player.sum > 21) {
+                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost `
+
+            }
+        })        
+    }
 
 }
 
