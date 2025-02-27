@@ -47,7 +47,7 @@ input:invalid {
 }
 
 .cardDeck:hover {
-    transform: perspective(1500px ) rotateY(20deg);
+    /* transform: perspective(1500px ) rotateY(20deg); */
 
 }
 

@@ -89,7 +89,8 @@ function createPlayers(currentDeck) {
 function playRound(currentDeck, players) {
     let indexPlayer = 0;
     createDOMElement('body', 'div', 'playfield', false);
-    createDOMElement('.playfield', 'button', 'cardDeck', 'draw a card');
+    createDOMElement('.playfield', 'button', 'cardDeck', false);
+    createDOMElement('.playfield', 'p', 'cardDeckLabel', 'draw a card')
     createDOMElement('.playfield', 'button', 'endRound', "don't draw a card and leave hand")
     createDOMElement('.playfield', 'p', 'currentPlayer', `it's ${players[indexPlayer].name}'s turn`);
     createDOMElement('.playfield', 'div', 'playersCards', false)
