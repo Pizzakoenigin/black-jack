@@ -72,7 +72,8 @@ function createPlayers(currentDeck) {
                     name: document.querySelector(`.nameOfPlayerInput${i}`).value,
                     hand: [],
                     score: 0,
-                    index: i
+                    index: i,
+                    sum: 0
                 }
                 players.push(player);
             }
@@ -96,40 +97,52 @@ function playRound(currentDeck, players) {
     createDOMElement('.playfield', 'p', 'currentPlayer', `it's ${players[indexPlayer].name}'s turn`);
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
-    players.forEach ((player) => {
-        createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
-        document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
-        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has no points yet`) 
-    })
-// solange mindests ein Spieler eine Runde spielen will do while
-// jeder Spieler der nicht aufgehört hat hat die Möglichkeit eine Karte zu ziehen
-    document.querySelector('.cardDeck').addEventListener('click', () => {
-        players[indexPlayer].hand.push(currentDeck.pop())
-
-        let selectorCurrentCard = players[indexPlayer].hand[players[indexPlayer].hand.length-1]
+    function createCard(players, selectorCurrentCard) {
 
 
         createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
-        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)        
-        
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)
+
         document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`).classList.add('card')
         document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`).classList.add('card-inner')
         document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`).classList.add('card-back')
         document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`).classList.add('card-front')
-        
+
         let backside = `.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`
         document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
+    }
 
-        //console.log(document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`));
-        
+    players.forEach((player) => {
+        createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
+        document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
+        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum}`)
+        if (player.hand.length != 0) {
+            for (let i = 0; player.hand.length; i++) {
+                createCard(players, player.hand[i])
+            }
+        }
+
+    })
+    // solange mindests ein Spieler eine Runde spielen will do while
+    // jeder Spieler der nicht aufgehört hat hat die Möglichkeit eine Karte zu ziehen
+    document.querySelector('.cardDeck').addEventListener('click', () => {
+        players[indexPlayer].hand.push(currentDeck.pop())
+        let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
+        createCard(players, selector)
+
+
+
+
+
+
         checkForWinner(players)
 
 
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
-        } else {    
+        } else {
             indexPlayer = 0;
         }
         addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
@@ -137,13 +150,13 @@ function playRound(currentDeck, players) {
         if (currentDeck.length == 0) {
             document.querySelector('.playfield').innerHTML = 'deck is empty'
         }
-        
+
     })
 
-// wenn Spieler keine Karte ziehen will ist die Runde für ihn vorbei
-// wenn Spieler eine Karte ziehen will wird die oberste Karte in seine Hand übertragen
-// Gewinner ermitteln
-// Gewinner bekommt einen Punkt und Jubel
+    // wenn Spieler keine Karte ziehen will ist die Runde für ihn vorbei
+    // wenn Spieler eine Karte ziehen will wird die oberste Karte in seine Hand übertragen
+    // Gewinner ermitteln
+    // Gewinner bekommt einen Punkt und Jubel
 
     document.querySelector('.endRound').addEventListener('click', () => {
         checkForWinner(players)
@@ -153,14 +166,15 @@ function playRound(currentDeck, players) {
             indexPlayer = 0;
         }
     })
-    
+
 
     document.querySelector('.restart').addEventListener('click', () => {
         document.querySelector('body').innerHTML = ''
         currentDeck = createRandomDeck();
-        players.forEach (       player =>        {
+        players.forEach(player => {
             player.hand = []
-        }     )
+            player.sum = 0
+        })
         playRound(currentDeck, players)
     })
 
@@ -172,13 +186,33 @@ function playRound(currentDeck, players) {
                 player.sum = player.sum + card.value
             })
             if (player.sum <= 21) {
-               document.querySelector(`.currentScore${player.name}`).textContent =  `${player.name} has ${player.sum} points.`
+                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points.`
+
             }
             if (player.sum > 21) {
                 document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost `
+                // players[player.index].pop
+                playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
+                players = playersFiltered
+                if (players.length > 1) {
+
+                    playRound(currentDeck, players)
+                }
+
+                if (players.length = 1) {
+                    console.log(players[0].name);
+                    document.querySelector('.cardDeck').disabled = true
+                    document.querySelector('.endRound').disabled = true
+                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has won!`
+                    player.score++
+                }
+
+
 
             }
-        })        
+
+
+        })
     }
 
 }
@@ -192,9 +226,9 @@ function createDOMElement(parentElement, elementType, elementClass, innerText) {
     // if(innerText) {
     //     document.querySelector(`${elementClass}`).textContent = `${innerText}`
     // }    
-    if(innerText) {
+    if (innerText) {
         elementName.textContent = `${innerText}`
-    }    
+    }
     document.querySelector(parentElement).appendChild(elementName)
 
 }

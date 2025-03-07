@@ -4,6 +4,7 @@
 
 body {
     font-family: sans-serif;
+    padding: 2em;
 }
 
 input:invalid {
