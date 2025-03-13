@@ -48,9 +48,7 @@ function createPlayers(currentDeck) {
     document.querySelector('input').oninput = function () {
         this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         numberOfPlayers = this.value
-
         document.querySelector('.numberOfPlayersConfirm').textContent = `confirm ${document.querySelector('.numberOfPlayersInput').value} players`
-
     }
 
     document.querySelector('.numberOfPlayersConfirm').textContent = `confirm ${document.querySelector('.numberOfPlayersInput').value} players`
@@ -97,23 +95,6 @@ function playRound(currentDeck, players) {
     createDOMElement('.playfield', 'p', 'currentPlayer', `it's ${players[indexPlayer].name}'s turn`);
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
-    function createCard(players, selectorCurrentCard) {
-
-
-        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
-        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
-        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
-        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)
-
-        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`).classList.add('card')
-        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`).classList.add('card-inner')
-        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`).classList.add('card-back')
-        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`).classList.add('card-front')
-
-        let backside = `.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`
-        document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
-    }
-
     players.forEach((player) => {
         createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
         document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
@@ -125,20 +106,12 @@ function playRound(currentDeck, players) {
         }
 
     })
-    // solange mindests ein Spieler eine Runde spielen will do while
-    // jeder Spieler der nicht aufgehört hat hat die Möglichkeit eine Karte zu ziehen
+
     document.querySelector('.cardDeck').addEventListener('click', () => {
         players[indexPlayer].hand.push(currentDeck.pop())
         let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
         createCard(players, selector)
-
-
-
-
-
-
         checkForWinner(players)
-
 
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
@@ -153,20 +126,15 @@ function playRound(currentDeck, players) {
 
     })
 
-    // wenn Spieler keine Karte ziehen will ist die Runde für ihn vorbei
-    // wenn Spieler eine Karte ziehen will wird die oberste Karte in seine Hand übertragen
-    // Gewinner ermitteln
-    // Gewinner bekommt einen Punkt und Jubel
-
     document.querySelector('.endRound').addEventListener('click', () => {
-        checkForWinner(players)
+        // checkForWinner(players)
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
         } else {
             indexPlayer = 0;
         }
+        document.querySelector('.currentPlayer').textContent = `it's ${players[indexPlayer].name}'s turn`
     })
-
 
     document.querySelector('.restart').addEventListener('click', () => {
         document.querySelector('body').innerHTML = ''
@@ -177,7 +145,6 @@ function playRound(currentDeck, players) {
         })
         playRound(currentDeck, players)
     })
-
 
     function checkForWinner(players) {
         players.forEach((player) => {
@@ -195,7 +162,11 @@ function playRound(currentDeck, players) {
                 playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
                 players = playersFiltered
                 if (players.length > 1) {
-
+                    // if (indexPlayer + 1 < players.length) {
+                    //     indexPlayer++;
+                    // } else {
+                    //     indexPlayer = 0;
+                    // }
                     playRound(currentDeck, players)
                 }
 
@@ -206,26 +177,30 @@ function playRound(currentDeck, players) {
                     document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has won!`
                     player.score++
                 }
-
-
-
             }
-
-
         })
+    }
+
+    function createCard(players, selectorCurrentCard) {
+        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
+        createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)
+
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`).classList.add('card')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`).classList.add('card-inner')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`).classList.add('card-back')
+        document.querySelector(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`).classList.add('card-front')
+
+        let backside = `.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`
+        document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
     }
 
 }
 
-
-// neue Runde?
-
 function createDOMElement(parentElement, elementType, elementClass, innerText) {
     let elementName = document.createElement(elementType);
     elementName.classList.add(elementClass);
-    // if(innerText) {
-    //     document.querySelector(`${elementClass}`).textContent = `${innerText}`
-    // }    
     if (innerText) {
         elementName.textContent = `${innerText}`
     }
