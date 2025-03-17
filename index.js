@@ -100,7 +100,7 @@ function playRound(currentDeck, players) {
     players.forEach((player) => {
         createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
         document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
-        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum}`)
+        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
         if (player.hand.length != 0) {
             for (let i = 0; player.hand.length; i++) {
                 createCard(players, player.hand[i])
@@ -156,37 +156,24 @@ function playRound(currentDeck, players) {
             })
             if (player.sum < 21) {
                 if (players.length > 1) {
-                   document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points.` 
+                   document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. player score: ${player.score}` 
                 }
                 
             }
 
             if (player.sum == 21) {
-                // document.querySelector('.cardDeck').disabled = true
-                // document.querySelector('.endRound').disabled = true
-                document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${player.sum} points. has won!`
                 player.score++
-
+                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} has won! player score: ${player.score}`
                 
             }
 
             if (player.sum > 21) {
-                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost `
-
-
-
-
-
+                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `
                 playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
                 players = playersFiltered
-                // console.log(players);
+
                 
                 if (players.length > 1) {
-                    // if (indexPlayer + 1 < players.length) {
-                    //     indexPlayer++;
-                    // } else {
-                    //     indexPlayer = 0;
-                    // }
                     playRound(currentDeck, players)
                 }
 
@@ -194,8 +181,9 @@ function playRound(currentDeck, players) {
                     console.log(players[0].name);
                     document.querySelector('.cardDeck').disabled = true
                     document.querySelector('.endRound').disabled = true
-                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won!`
-                    player.score++
+                    players[0].score++
+                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`
+                    
                 }
             }
         })
