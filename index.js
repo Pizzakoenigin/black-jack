@@ -162,8 +162,11 @@ function playRound(currentDeck, players) {
             }
 
             if (player.sum == 21) {
+                // document.querySelector('.cardDeck').disabled = true
+                // document.querySelector('.endRound').disabled = true
+                document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${player.sum} points. has won!`
                 player.score++
-                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} has won! player score: ${player.score}`
+
                 
             }
 
@@ -174,6 +177,11 @@ function playRound(currentDeck, players) {
 
                 
                 if (players.length > 1) {
+                    // if (indexPlayer + 1 < players.length) {
+                    //     indexPlayer++;
+                    // } else {
+                    //     indexPlayer = 0;
+                    // }
                     playRound(currentDeck, players)
                 }
 
@@ -181,9 +189,8 @@ function playRound(currentDeck, players) {
                     console.log(players[0].name);
                     document.querySelector('.cardDeck').disabled = true
                     document.querySelector('.endRound').disabled = true
-                    players[0].score++
-                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`
-                    
+                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won!`
+                    player.score++
                 }
             }
         })
