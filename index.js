@@ -165,7 +165,7 @@ function playRound(currentDeck, players) {
                 // document.querySelector('.cardDeck').disabled = true
                 // document.querySelector('.endRound').disabled = true
                 player.score++
-                document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${player.sum} points. has won!`
+                document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${player.sum} points. has won! player score: ${player.score}`
 
                 
             }
@@ -185,7 +185,7 @@ function playRound(currentDeck, players) {
                     document.querySelector('.cardDeck').disabled = true
                     document.querySelector('.endRound').disabled = true
                     players[0].score++
-                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won!`
+                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${player.score}`
                 }
             }
         })
