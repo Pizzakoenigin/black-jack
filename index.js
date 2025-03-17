@@ -86,6 +86,8 @@ function createPlayers(currentDeck) {
 // Runde starten 
 // Kartenstapel in ui zeigen // Button
 function playRound(currentDeck, players) {
+    document.querySelector('body').innerHTML = ''
+    // console.log(players);
     let indexPlayer = 0;
     createDOMElement('body', 'div', 'playfield', false);
     createDOMElement('.playfield', 'button', 'cardDeck', false);
@@ -152,15 +154,33 @@ function playRound(currentDeck, players) {
             player.hand.forEach((card) => {
                 player.sum = player.sum + card.value
             })
-            if (player.sum <= 21) {
-                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points.`
-
+            if (player.sum < 21) {
+                if (players.length > 1) {
+                   document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points.` 
+                }
+                
             }
+
+            if (player.sum == 21) {
+                // document.querySelector('.cardDeck').disabled = true
+                // document.querySelector('.endRound').disabled = true
+                document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${player.sum} points. has won!`
+                player.score++
+
+                
+            }
+
             if (player.sum > 21) {
                 document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost `
-                // players[player.index].pop
+
+
+
+
+
                 playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
                 players = playersFiltered
+                // console.log(players);
+                
                 if (players.length > 1) {
                     // if (indexPlayer + 1 < players.length) {
                     //     indexPlayer++;
@@ -174,7 +194,7 @@ function playRound(currentDeck, players) {
                     console.log(players[0].name);
                     document.querySelector('.cardDeck').disabled = true
                     document.querySelector('.endRound').disabled = true
-                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has won!`
+                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won!`
                     player.score++
                 }
             }
