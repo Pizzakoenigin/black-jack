@@ -76,7 +76,7 @@ function createPlayers(currentDeck) {
                 players.push(player);
             }
             document.querySelector('body').innerHTML = ''
-            playRound(currentDeck, players)
+            createGamefield(currentDeck, players)
         })
     })
     return players
@@ -85,7 +85,7 @@ function createPlayers(currentDeck) {
 
 // Runde starten 
 // Kartenstapel in ui zeigen // Button
-function playRound(currentDeck, players) {
+function createGamefield(currentDeck, players) {
     document.querySelector('body').innerHTML = ''
     // console.log(players);
     let indexPlayer = 0;
@@ -102,7 +102,9 @@ function playRound(currentDeck, players) {
         document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
         createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
         if (player.hand.length != 0) {
-            for (let i = 0; player.hand.length; i++) {
+            for (let i = 0; i < player.hand.length; i++) {
+                console.log(player.hand[i]);
+                
                 createCard(players, player.hand[i])
             }
         }
@@ -113,7 +115,7 @@ function playRound(currentDeck, players) {
         players[indexPlayer].hand.push(currentDeck.pop())
         let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
         createCard(players, selector)
-        checkForWinner(players)
+        checkForWinner(players, currentDeck)
 
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
@@ -145,54 +147,10 @@ function playRound(currentDeck, players) {
             player.hand = []
             player.sum = 0
         })
-        playRound(currentDeck, players)
+        createGamefield(currentDeck, players)
     })
 
-    function checkForWinner(players) {
-        players.forEach((player) => {
-            player.sum = 0
-            player.hand.forEach((card) => {
-                player.sum = player.sum + card.value
-            })
-            if (player.sum < 21) {
-                if (players.length > 1) {
-                    addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`) 
-                }
-                
-            }
 
-            if (player.sum == 21) {
-                // document.querySelector('.cardDeck').disabled = true
-                // document.querySelector('.endRound').disabled = true
-                if (players.length > 1) {
-                  player.score++  
-                }
-                
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
-
-                
-            }
-
-            if (player.sum > 21) {
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
-                playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
-                players = playersFiltered
-
-                
-                if (players.length > 1) {
-                    playRound(currentDeck, players)
-                }
-
-                if (players.length = 1) {
-                    console.log(players[0].name);
-                    document.querySelector('.cardDeck').disabled = true
-                    document.querySelector('.endRound').disabled = true
-                    players[0].score++
-                    addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
-                }
-            }
-        })
-    }
 
     function createCard(players, selectorCurrentCard) {
         createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
@@ -209,6 +167,55 @@ function playRound(currentDeck, players) {
         document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
     }
 
+}
+
+function checkForWinner(players, currentDeck) {
+    players.forEach((player) => {
+        player.sum = 0
+        player.hand.forEach((card) => {
+            player.sum = player.sum + card.value
+        })
+        if (player.sum < 21) {
+            if (players.length > 1) {
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`) 
+            }
+            
+        }
+
+        if (player.sum == 21) {
+            // document.querySelector('.cardDeck').disabled = true
+            // document.querySelector('.endRound').disabled = true
+            if (players.length > 1) {
+              player.score++
+
+            }
+            
+            addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
+
+            
+        }
+
+        if (player.sum > 21) {
+            addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
+            playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
+            players = playersFiltered
+
+            
+            if (players.length > 1) {
+                console.log(players);
+                
+                createGamefield(currentDeck, players)
+            }
+
+            if (players.length = 1) {
+                console.log(players[0].name);
+                document.querySelector('.cardDeck').disabled = true
+                document.querySelector('.endRound').disabled = true
+                players[0].score++
+                addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
+            }
+        }
+    })
 }
 
 function createDOMElement(parentElement, elementType, elementClass, innerText) {
