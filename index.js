@@ -198,22 +198,34 @@ function checkForWinner(players, currentDeck) {
         if (player.sum > 21) {
             addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
             playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
-            players = playersFiltered
+
+            players.forEach ((player) => {
+                player.score++
+
+            })
+            createGamefield(currentDeck, playersFiltered)     
+                   
+            // players = playersFiltered
 
             
-            if (players.length > 1) {
-                console.log(players);
+            // if (players.length > 1) {
+            //     console.log(players);
                 
-                createGamefield(currentDeck, players)
-            }
+            //     createGamefield(currentDeck, players)
+            // }
+            
 
-            if (players.length = 1) {
-                console.log(players[0].name);
-                document.querySelector('.cardDeck').disabled = true
-                document.querySelector('.endRound').disabled = true
-                players[0].score++
-                addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
-            }
+            // if (players.length = 1) {
+            //     console.log(players[0].name);
+            //     document.querySelector('.cardDeck').disabled = true
+            //     document.querySelector('.endRound').disabled = true
+            //     players[0].score++
+            //     addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
+            // }
+
+
+
+
         }
     })
 }
