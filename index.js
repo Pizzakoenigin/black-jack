@@ -71,7 +71,8 @@ function createPlayers(currentDeck) {
                     hand: [],
                     score: 0,
                     index: i,
-                    sum: 0
+                    sum: 0,
+                    inGame: true,
                 }
                 players.push(player);
             }
@@ -98,23 +99,25 @@ function createGamefield(currentDeck, players) {
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
     players.forEach((player) => {
-        createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
-        document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
-        createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
-        if (player.hand.length != 0) {
-            for (let i = 0; i < player.hand.length; i++) {
-                console.log(player.hand[i]);
-                
-                createCard(players, player.hand[i])
+        if (player.inGame) {
+            createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
+            document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
+            createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+            
+            if (player.hand.length != 0) {
+                for (let i = 0; i < player.hand.length; i++) {
+                    createCard(player, player.hand[i])
+                }
             }
         }
+
 
     })
 
     document.querySelector('.cardDeck').addEventListener('click', () => {
         players[indexPlayer].hand.push(currentDeck.pop())
         let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
-        createCard(players, selector)
+        createCard(players[indexPlayer], selector)
         checkForWinner(players, currentDeck)
 
         if (indexPlayer + 1 < players.length) {
@@ -146,14 +149,15 @@ function createGamefield(currentDeck, players) {
         players.forEach(player => {
             player.hand = []
             player.sum = 0
+            player.inGame = true
         })
         createGamefield(currentDeck, players)
     })
 
 
 
-    function createCard(players, selectorCurrentCard) {
-        createDOMElement(`.${players[indexPlayer].name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
+    function createCard(player, selectorCurrentCard) {
+        createDOMElement(`.${player.name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)
@@ -171,62 +175,39 @@ function createGamefield(currentDeck, players) {
 
 function checkForWinner(players, currentDeck) {
     players.forEach((player) => {
-        player.sum = 0
-        player.hand.forEach((card) => {
-            player.sum = player.sum + card.value
-        })
-        if (player.sum < 21) {
-            if (players.length > 1) {
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`) 
-            }
-            
-        }
-
-        if (player.sum == 21) {
-            // document.querySelector('.cardDeck').disabled = true
-            // document.querySelector('.endRound').disabled = true
-            if (players.length > 1) {
-              player.score++
-
-            }
-            
-            addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
-
-            
-        }
-
-        if (player.sum > 21) {
-            addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
-            playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
-
-            players.forEach ((player) => {
-                player.score++
-
+        if (player.inGame) {
+            player.sum = 0
+            player.hand.forEach((card) => {
+                player.sum = player.sum + card.value
             })
-            createGamefield(currentDeck, playersFiltered)     
-                   
-            // players = playersFiltered
+            if (player.sum < 21) {
+                if (players.length > 1) {
+                    addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+                }
 
-            
-            // if (players.length > 1) {
-            //     console.log(players);
-                
-            //     createGamefield(currentDeck, players)
-            // }
-            
+            }
 
-            // if (players.length = 1) {
-            //     console.log(players[0].name);
-            //     document.querySelector('.cardDeck').disabled = true
-            //     document.querySelector('.endRound').disabled = true
-            //     players[0].score++
-            //     addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
-            // }
+            if (player.sum == 21) {
+                // document.querySelector('.cardDeck').disabled = true
+                // document.querySelector('.endRound').disabled = true
+                player.score++
+                player.inGame = false
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
+            }
 
+            if (player.sum > 21) {
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
+                player.inGame = false
 
-
-
+                // players.forEach((player) => {
+                //     if (player.inGame) {
+                //         player.score++
+                //     }
+                // })
+                // createGamefield(currentDeck, players)
+            }
         }
+
     })
 }
 
