@@ -48,7 +48,7 @@ function createPlayers(currentDeck) {
     document.querySelector('input').oninput = function () {
         this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         numberOfPlayers = this.value
-        document.querySelector('.numberOfPlayersConfirm').textContent = `confirm ${document.querySelector('.numberOfPlayersInput').value} players`
+        addText('.numberOfPlayersConfirm', `confirm ${document.querySelector('.numberOfPlayersInput').value} players`)
     }
 
     document.querySelector('.numberOfPlayersConfirm').textContent = `confirm ${document.querySelector('.numberOfPlayersInput').value} players`
@@ -123,7 +123,7 @@ function playRound(currentDeck, players) {
         addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
 
         if (currentDeck.length == 0) {
-            document.querySelector('.playfield').innerHTML = 'deck is empty'
+            addText('.playfield', 'deck is empty')
         }
 
     })
@@ -135,7 +135,7 @@ function playRound(currentDeck, players) {
         } else {
             indexPlayer = 0;
         }
-        document.querySelector('.currentPlayer').textContent = `it's ${players[indexPlayer].name}'s turn`
+        addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
     })
 
     document.querySelector('.restart').addEventListener('click', () => {
@@ -156,7 +156,7 @@ function playRound(currentDeck, players) {
             })
             if (player.sum < 21) {
                 if (players.length > 1) {
-                   document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. player score: ${player.score}` 
+                    addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`) 
                 }
                 
             }
@@ -164,14 +164,17 @@ function playRound(currentDeck, players) {
             if (player.sum == 21) {
                 // document.querySelector('.cardDeck').disabled = true
                 // document.querySelector('.endRound').disabled = true
-                player.score++
-                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. has won! player score: ${player.score}`
+                if (players.length > 1) {
+                  player.score++  
+                }
+                
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
 
                 
             }
 
             if (player.sum > 21) {
-                document.querySelector(`.currentScore${player.name}`).textContent = `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
                 playersFiltered = players.filter(function (filterOut) { return filterOut.index != player.index })
                 players = playersFiltered
 
@@ -185,7 +188,7 @@ function playRound(currentDeck, players) {
                     document.querySelector('.cardDeck').disabled = true
                     document.querySelector('.endRound').disabled = true
                     players[0].score++
-                    document.querySelector(`.currentScore${players[0].name}`).textContent = `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`
+                    addText(`.currentScore${players[0].name}`, `${players[0].name} has ${players[0].sum} points. ${players[0].name} has won! player score: ${players[0].score}`)
                 }
             }
         })
