@@ -90,6 +90,7 @@ function createGamefield(currentDeck, players) {
     document.querySelector('body').innerHTML = ''
     // console.log(players);
     let indexPlayer = 0;
+    // setInterval(checkIndexPlayer(players, indexPlayer), 1)
     createDOMElement('body', 'div', 'playfield', false);
     createDOMElement('.playfield', 'button', 'cardDeck', false);
     createDOMElement('.playfield', 'p', 'cardDeckLabel', 'draw a card')
@@ -103,7 +104,7 @@ function createGamefield(currentDeck, players) {
             createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
             document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
             createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
-            
+
             if (player.hand.length != 0) {
                 for (let i = 0; i < player.hand.length; i++) {
                     createCard(player, player.hand[i])
@@ -114,11 +115,15 @@ function createGamefield(currentDeck, players) {
 
     })
 
+
+
     document.querySelector('.cardDeck').addEventListener('click', () => {
-        players[indexPlayer].hand.push(currentDeck.pop())
-        let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
-        createCard(players[indexPlayer], selector)
-        checkForWinner(players, currentDeck)
+        if (players[indexPlayer].inGame) {
+            players[indexPlayer].hand.push(currentDeck.pop())
+            let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
+            createCard(players[indexPlayer], selector)
+            checkForWinner(players, currentDeck)
+        }
 
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
@@ -131,10 +136,28 @@ function createGamefield(currentDeck, players) {
             addText('.playfield', 'deck is empty')
         }
 
+
+
     })
 
     document.querySelector('.endRound').addEventListener('click', () => {
         // checkForWinner(players)
+
+        // check nur noch ein spieler übrig. spieler gewinnt
+        let activePlayers = 0
+
+        for (let i = 0; i < players.length; i++) {
+
+            if (players[i].inGame) {
+                activePlayers++
+            }
+        }
+
+        if (activePlayers = 1) {
+            players[indexPlayer].score++
+            addText(`.currentScore${players[indexPlayer].name}`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
+        }
+
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
         } else {
@@ -153,8 +176,6 @@ function createGamefield(currentDeck, players) {
         })
         createGamefield(currentDeck, players)
     })
-
-
 
     function createCard(player, selectorCurrentCard) {
         createDOMElement(`.${player.name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
@@ -181,15 +202,10 @@ function checkForWinner(players, currentDeck) {
                 player.sum = player.sum + card.value
             })
             if (player.sum < 21) {
-                if (players.length > 1) {
-                    addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
-                }
-
+                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
             }
 
             if (player.sum == 21) {
-                // document.querySelector('.cardDeck').disabled = true
-                // document.querySelector('.endRound').disabled = true
                 player.score++
                 player.inGame = false
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
@@ -198,17 +214,15 @@ function checkForWinner(players, currentDeck) {
             if (player.sum > 21) {
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
                 player.inGame = false
-
-                // players.forEach((player) => {
-                //     if (player.inGame) {
-                //         player.score++
-                //     }
-                // })
-                // createGamefield(currentDeck, players)
             }
         }
 
+
     })
+}
+
+function checkIndexPlayer(players, indexPlayer) {
+    
 }
 
 function createDOMElement(parentElement, elementType, elementClass, innerText) {
