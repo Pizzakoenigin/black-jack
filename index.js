@@ -125,12 +125,7 @@ function createGamefield(currentDeck, players) {
             checkForWinner(players, currentDeck)
         }
 
-        if (indexPlayer + 1 < players.length) {
-            indexPlayer++;
-        } else {
-            indexPlayer = 0;
-        }
-        addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
+        checkIndexPlayer()
 
         if (currentDeck.length == 0) {
             addText('.playfield', 'deck is empty')
@@ -141,8 +136,6 @@ function createGamefield(currentDeck, players) {
     })
 
     document.querySelector('.endRound').addEventListener('click', () => {
-        // checkForWinner(players)
-
         // check nur noch ein spieler übrig. spieler gewinnt
         let activePlayers = 0
 
@@ -153,17 +146,13 @@ function createGamefield(currentDeck, players) {
             }
         }
 
-        if (activePlayers = 1) {
+        if (activePlayers = 1 && players[indexPlayer].inGame) {
             players[indexPlayer].score++
+            players[indexPlayer].inGame = false
             addText(`.currentScore${players[indexPlayer].name}`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
         }
 
-        if (indexPlayer + 1 < players.length) {
-            indexPlayer++;
-        } else {
-            indexPlayer = 0;
-        }
-        addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
+        checkIndexPlayer()
     })
 
     document.querySelector('.restart').addEventListener('click', () => {
@@ -190,6 +179,34 @@ function createGamefield(currentDeck, players) {
 
         let backside = `.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`
         document.querySelector(backside).style.background = `url('cards/${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}.png')`
+    }
+
+    function checkIndexPlayer() {
+        let leftOutPlayers = 0
+        for (let i = 0; i < players.length; i++) {
+            if (!players[i].inGame) {
+                leftOutPlayers++
+            }
+
+        }
+
+            if (leftOutPlayers == players.length) {
+                return
+            }        
+
+
+        if (indexPlayer + 1 < players.length) {
+            indexPlayer++;
+            if (!players[indexPlayer].inGame) {
+                checkIndexPlayer()
+            }
+        } else {
+            indexPlayer = 0;
+            if (!players[indexPlayer].inGame) {
+                checkIndexPlayer()
+            }
+        }
+        addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
     }
 
 }
@@ -221,9 +238,7 @@ function checkForWinner(players, currentDeck) {
     })
 }
 
-function checkIndexPlayer(players, indexPlayer) {
-    
-}
+
 
 function createDOMElement(parentElement, elementType, elementClass, innerText) {
     let elementName = document.createElement(elementType);
