@@ -1,10 +1,13 @@
 :root {
-  /* --squareWidth: 2em; */
+  --background:rgba(199, 224, 180, 0.436);
 }
 
 body {
   font-family: sans-serif;
-  padding: 2em;
+  padding: 0.5em;
+  /* background-color: rgba(6, 173, 0, 0.545); */
+  background: url(background.jpg);
+  background-size: cover;
 }
 
 input:invalid {
@@ -13,8 +16,14 @@ input:invalid {
 
 .container {}
 
+.playfield {
+  background-color: var(--background);
+  border-radius: 1em;
+  padding: 1em
+
+}
+
 button {
-  
   background-color: rgb(166, 11, 11);
   color: white;
   border: 1px white;
@@ -26,17 +35,13 @@ button {
   padding: 20px;
   margin: auto;
   filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
-  
-
-
 }
 
-
-.restart .endRound{
-
-}
 
 .createPlayerUI {
+  background-color: var(--background);
+  border-radius: 1em;
+  padding: 1em;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -74,7 +79,6 @@ button {
   flex-direction: row;
   gap: 1em;
   padding: 1em;
-
 }
 
 .cardDeck {
