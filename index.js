@@ -140,13 +140,12 @@ function createGamefield(currentDeck, players) {
         let activePlayers = 0
 
         for (let i = 0; i < players.length; i++) {
-
             if (players[i].inGame) {
                 activePlayers++
             }
         }
 
-        if (activePlayers = 1 && players[indexPlayer].inGame) {
+        if (activePlayers == 1 && players[indexPlayer].inGame) {
             players[indexPlayer].score++
             players[indexPlayer].inGame = false
             addText(`.currentScore${players[indexPlayer].name}`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
