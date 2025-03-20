@@ -39,7 +39,7 @@ function createPlayers(currentDeck) {
     let players = []
 
     createDOMElement('body', 'div', 'createPlayerUI', false);
-    createDOMElement('.createPlayerUI', 'label', 'numberOfPlayersLabel', 'Number of players?');
+    createDOMElement('.createPlayerUI', 'h1', 'numberOfPlayersLabel', 'Number of players?');
     createDOMElement('.createPlayerUI', 'input', 'numberOfPlayersInput', false)
     createDOMElement('.createPlayerUI', 'button', 'numberOfPlayersConfirm', false)
 
@@ -48,21 +48,21 @@ function createPlayers(currentDeck) {
     document.querySelector('input').oninput = function () {
         this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         numberOfPlayers = this.value
-        addText('.numberOfPlayersConfirm', `confirm ${document.querySelector('.numberOfPlayersInput').value} players`)
+        addText('.numberOfPlayersConfirm', `Confirm ${document.querySelector('.numberOfPlayersInput').value} players`)
     }
 
-    document.querySelector('.numberOfPlayersConfirm').textContent = `confirm ${document.querySelector('.numberOfPlayersInput').value} players`
+    document.querySelector('.numberOfPlayersConfirm').textContent = `Confirm ${document.querySelector('.numberOfPlayersInput').value} players`
 
     document.querySelector('.numberOfPlayersConfirm').addEventListener('click', () => {
         numberOfPlayers = document.querySelector('.numberOfPlayersInput').value
         document.querySelector('.createPlayerUI').innerHTML = '';
-        createDOMElement('.createPlayerUI', 'p', 'numberOfPlayersDescription', 'give names to your players');
+        createDOMElement('.createPlayerUI', 'h1', 'numberOfPlayersDescription', 'Give names to your players');
 
         for (let i = 1; i <= numberOfPlayers; i++) {
-            createDOMElement('.createPlayerUI', 'label', `nameOfPlayerLabel${i}`, `name of player ${i}`);
+            createDOMElement('.createPlayerUI', 'label', `nameOfPlayerLabel${i}`, `Name of player ${i}`);
             createDOMElement('.createPlayerUI', 'input', `nameOfPlayerInput${i}`, false);
         }
-        createDOMElement('.createPlayerUI', 'button', 'confirmPlayerNames', 'confirm player names')
+        createDOMElement('.createPlayerUI', 'button', 'confirmPlayerNames', 'Confirm player names')
 
         document.querySelector('.confirmPlayerNames').addEventListener('click', () => {
             for (let i = 1; i <= numberOfPlayers; i++) {
@@ -92,11 +92,14 @@ function createGamefield(currentDeck, players) {
     let indexPlayer = 0;
     // setInterval(checkIndexPlayer(players, indexPlayer), 1)
     createDOMElement('body', 'div', 'playfield', false);
-    createDOMElement('.playfield', 'button', 'cardDeck', false);
-    createDOMElement('.playfield', 'p', 'cardDeckLabel', 'draw a card')
-    createDOMElement('.playfield', 'button', 'endRound', "don't draw a card and leave hand")
-    createDOMElement('.playfield', 'button', 'restart', "restart")
-    createDOMElement('.playfield', 'p', 'currentPlayer', `it's ${players[indexPlayer].name}'s turn`);
+    createDOMElement('.playfield', 'div', 'gameButtons', false)
+    createDOMElement('.gameButtons', 'button', 'restart', "New Round")
+    createDOMElement('.gameButtons', 'div', 'cardDeckContainer', false)    
+    createDOMElement('.cardDeckContainer', 'button', 'cardDeck', false);
+    createDOMElement('.cardDeckContainer', 'p', 'cardDeckLabel', 'Draw a card')
+    createDOMElement('.gameButtons', 'button', 'endRound', "Don't draw a card and leave hand")
+
+    createDOMElement('.playfield', 'p', 'currentPlayer', `It's ${players[indexPlayer].name}'s turn`);
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
     players.forEach((player) => {
