@@ -148,6 +148,10 @@ function createGamefield(currentDeck, players) {
         if (activePlayers == 1 && players[indexPlayer].inGame) {
             players[indexPlayer].score++
             players[indexPlayer].inGame = false
+            document.querySelector(`.currentScore${players[indexPlayer].name}`).style.color = 'green'
+            document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
+            document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
+
             addText(`.currentScore${players[indexPlayer].name}`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
         }
 
@@ -186,13 +190,11 @@ function createGamefield(currentDeck, players) {
             if (!players[i].inGame) {
                 leftOutPlayers++
             }
-
         }
 
-            if (leftOutPlayers == players.length) {
-                return
-            }        
-
+        if (leftOutPlayers == players.length) {
+            return
+        }
 
         if (indexPlayer + 1 < players.length) {
             indexPlayer++;
@@ -224,10 +226,16 @@ function checkForWinner(players, currentDeck) {
             if (player.sum == 21) {
                 player.score++
                 player.inGame = false
+                document.querySelector(`.currentScore${player.name}`).style.color = 'green'
+                document.querySelector(`.${player.name}Cards`).style.background = 'green'
+                document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
             }
 
             if (player.sum > 21) {
+                document.querySelector(`.currentScore${player.name}`).style.color = 'gray'
+                document.querySelector(`.${player.name}Cards`).style.background = 'gray'
+                document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
                 player.inGame = false
             }

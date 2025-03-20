@@ -52,6 +52,15 @@ input:invalid {
 
 }
 
+.transparent .card {
+  opacity: 70%;
+
+}
+
+.transparent .card-inner {
+  transform: rotateY(180deg);
+}
+
 .card {
     background-color: transparent;
     perspective: 1000px;
