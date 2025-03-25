@@ -1,5 +1,5 @@
 :root {
-  --background:rgba(199, 224, 180, 0.436);
+  --background: rgba(199, 224, 180, 0.436);
 }
 
 body {
@@ -20,7 +20,6 @@ input:invalid {
   background-color: var(--background);
   border-radius: 1em;
   padding: 1em
-
 }
 
 button {
@@ -33,8 +32,24 @@ button {
   max-width: fit-content;
   height: fit-content;
   padding: 20px;
-  margin: auto;
+  margin: auto 0 auto 0;
   filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
+}
+
+input {
+  filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
+}
+
+button:focus,
+button:active,
+button:hover,
+input:focus,
+input:active,
+input:hover {
+  outline: 2px solid black;
+  /* outline-offset: 0; */
+  filter: drop-shadow(0 0 1rem rgba(0, 0, 0, 0.693));
+  transition: all 0.2s ease-in;
 }
 
 
@@ -76,9 +91,17 @@ button {
   border: 1px solid rgba(165, 165, 165, 0.4);
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 1em;
   padding: 1em;
+}
+
+.handCards {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  flex-wrap: wrap;
+  /* padding: 1em; */
 }
 
 .cardDeck {
@@ -93,6 +116,7 @@ button {
   border: none;
   filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
   outline: none;
+  outline-offset: 0;
   max-width: 100%;
   padding: 0;
   margin: 0 auto 0 auto;

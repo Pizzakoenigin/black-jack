@@ -99,14 +99,17 @@ function createGamefield(currentDeck, players) {
     createDOMElement('.cardDeckContainer', 'p', 'cardDeckLabel', 'Draw a card')
     createDOMElement('.gameButtons', 'button', 'endRound', "Don't draw a card and leave hand")
 
-    createDOMElement('.playfield', 'p', 'currentPlayer', `It's ${players[indexPlayer].name}'s turn`);
+
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
     players.forEach((player) => {
         if (player.inGame) {
             createDOMElement('.playersCards', 'div', `${player.name}Cards`, false)
+            createDOMElement(`.${player.name}Cards`, 'p', `${player.name}Turn`, `${player.name}`);
             document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
-            createDOMElement('.playfield', 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+            createDOMElement(`.${player.name}Cards`, 'div', `${player.name}Hand`)
+            document.querySelector(`.${player.name}Hand`).classList.add('handCards')
+            createDOMElement(`.${player.name}Cards`, 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
 
             if (player.hand.length != 0) {
                 for (let i = 0; i < player.hand.length; i++) {
@@ -121,6 +124,7 @@ function createGamefield(currentDeck, players) {
 
 
     document.querySelector('.cardDeck').addEventListener('click', () => {
+        addText(`.${players[indexPlayer].name}Turn`, `${players[indexPlayer].name}`)
         if (players[indexPlayer].inGame) {
             players[indexPlayer].hand.push(currentDeck.pop())
             let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
@@ -151,7 +155,7 @@ function createGamefield(currentDeck, players) {
         if (activePlayers == 1 && players[indexPlayer].inGame) {
             players[indexPlayer].score++
             players[indexPlayer].inGame = false
-            document.querySelector(`.currentScore${players[indexPlayer].name}`).style.color = 'green'
+            // document.querySelector(`.currentScore${players[indexPlayer].name}`).style.color = 'green'
             document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
             document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
 
@@ -173,7 +177,7 @@ function createGamefield(currentDeck, players) {
     })
 
     function createCard(player, selectorCurrentCard) {
-        createDOMElement(`.${player.name}Cards`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
+        createDOMElement(`.${player.name}Hand`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-front`, false)
         createDOMElement(`.${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-inner`, 'div', `${selectorCurrentCard.symbol}_of_${selectorCurrentCard.colorType}-back`, false)
@@ -210,7 +214,7 @@ function createGamefield(currentDeck, players) {
                 checkIndexPlayer()
             }
         }
-        addText('.currentPlayer', `it's ${players[indexPlayer].name}'s turn`)
+        addText(`.${players[indexPlayer].name}Turn`, `It's ${players[indexPlayer].name}'s turn`)
     }
 
 }
@@ -229,14 +233,14 @@ function checkForWinner(players, currentDeck) {
             if (player.sum == 21) {
                 player.score++
                 player.inGame = false
-                document.querySelector(`.currentScore${player.name}`).style.color = 'green'
+                // document.querySelector(`.currentScore${player.name}`).style.color = 'green'
                 document.querySelector(`.${player.name}Cards`).style.background = 'green'
                 document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
             }
 
             if (player.sum > 21) {
-                document.querySelector(`.currentScore${player.name}`).style.color = 'gray'
+                // document.querySelector(`.currentScore${player.name}`).style.color = 'gray'
                 document.querySelector(`.${player.name}Cards`).style.background = 'gray'
                 document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
