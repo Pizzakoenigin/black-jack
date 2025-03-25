@@ -94,7 +94,7 @@ function createGamefield(currentDeck, players) {
     createDOMElement('body', 'div', 'playfield', false);
     createDOMElement('.playfield', 'div', 'gameButtons', false)
     createDOMElement('.gameButtons', 'button', 'restart', "New Round")
-    createDOMElement('.gameButtons', 'div', 'cardDeckContainer', false)    
+    createDOMElement('.gameButtons', 'div', 'cardDeckContainer', false)
     createDOMElement('.cardDeckContainer', 'button', 'cardDeck', false);
     createDOMElement('.cardDeckContainer', 'p', 'cardDeckLabel', 'Draw a card')
     createDOMElement('.gameButtons', 'button', 'endRound', "Don't draw a card and leave hand")
@@ -121,10 +121,11 @@ function createGamefield(currentDeck, players) {
 
     })
 
-
+    document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'rgba(255, 255, 255, 0.5)'
 
     document.querySelector('.cardDeck').addEventListener('click', () => {
         addText(`.${players[indexPlayer].name}Turn`, `${players[indexPlayer].name}`)
+        document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'none'
         if (players[indexPlayer].inGame) {
             players[indexPlayer].hand.push(currentDeck.pop())
             let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
@@ -215,6 +216,7 @@ function createGamefield(currentDeck, players) {
             }
         }
         addText(`.${players[indexPlayer].name}Turn`, `It's ${players[indexPlayer].name}'s turn`)
+        document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'rgba(255, 255, 255, 0.5)'
     }
 
 }
