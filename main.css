@@ -97,6 +97,10 @@ input:hover {
   padding: 1em;
 }
 
+.currentScore {
+  opacity: 0%
+}
+
 .handCards {
   display: flex;
   flex-direction: row;
@@ -133,7 +137,7 @@ input:hover {
 
 }
 
-.transparent .card-inner {
+.rotate .card-inner {
   transform: rotateY(180deg);
 }
 
@@ -149,7 +153,7 @@ input:hover {
   width: calc(63mm/3);
   height: calc(88mm/3);
   text-align: center;
-  transition: transform 0.8s;
+  transition: transform 0.2s;
   transform-style: preserve-3d;
   background-size: contain;
 }

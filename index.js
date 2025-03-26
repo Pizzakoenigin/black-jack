@@ -109,7 +109,8 @@ function createGamefield(currentDeck, players) {
             document.querySelector(`.${player.name}Cards`).classList.add('cardArea')
             createDOMElement(`.${player.name}Cards`, 'div', `${player.name}Hand`)
             document.querySelector(`.${player.name}Hand`).classList.add('handCards')
-            createDOMElement(`.${player.name}Cards`, 'p', `currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+            createDOMElement(`.${player.name}Cards`, 'p', `${player.name}CurrentScore`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+            document.querySelector(`.${player.name}CurrentScore`).classList.add('currentScore')
 
             if (player.hand.length != 0) {
                 for (let i = 0; i < player.hand.length; i++) {
@@ -122,10 +123,14 @@ function createGamefield(currentDeck, players) {
     })
 
     document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'rgba(255, 255, 255, 0.5)'
+    document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
+    document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
+
 
     document.querySelector('.cardDeck').addEventListener('click', () => {
         addText(`.${players[indexPlayer].name}Turn`, `${players[indexPlayer].name}`)
         document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'none'
+
         if (players[indexPlayer].inGame) {
             players[indexPlayer].hand.push(currentDeck.pop())
             let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
@@ -145,6 +150,8 @@ function createGamefield(currentDeck, players) {
 
     document.querySelector('.endRound').addEventListener('click', () => {
         // check nur noch ein spieler übrig. spieler gewinnt
+
+
         let activePlayers = 0
 
         for (let i = 0; i < players.length; i++) {
@@ -159,11 +166,15 @@ function createGamefield(currentDeck, players) {
             // document.querySelector(`.currentScore${players[indexPlayer].name}`).style.color = 'green'
             document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
             document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
+            document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
+            document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
 
-            addText(`.currentScore${players[indexPlayer].name}`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
+            addText(`.${players[indexPlayer].name}CurrentScore`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
         }
 
         checkIndexPlayer()
+
+
     })
 
     document.querySelector('.restart').addEventListener('click', () => {
@@ -193,6 +204,12 @@ function createGamefield(currentDeck, players) {
     }
 
     function checkIndexPlayer() {
+        if (players[indexPlayer].inGame) {
+            document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'none'
+            document.querySelector(`.${players[indexPlayer].name}Cards`).classList.remove('rotate')
+            document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '0%'
+        }
+
         let leftOutPlayers = 0
         for (let i = 0; i < players.length; i++) {
             if (!players[i].inGame) {
@@ -217,6 +234,8 @@ function createGamefield(currentDeck, players) {
         }
         addText(`.${players[indexPlayer].name}Turn`, `It's ${players[indexPlayer].name}'s turn`)
         document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'rgba(255, 255, 255, 0.5)'
+        document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
+        document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
     }
 
 }
@@ -229,23 +248,27 @@ function checkForWinner(players, currentDeck) {
                 player.sum = player.sum + card.value
             })
             if (player.sum < 21) {
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
+                addText(`.${player.name}CurrentScore`, `${player.name} has ${player.sum} points. player score: ${player.score}`)
             }
 
             if (player.sum == 21) {
                 player.score++
                 player.inGame = false
-                // document.querySelector(`.currentScore${player.name}`).style.color = 'green'
+                // document.querySelector(`.${player.name}CurrentScore`).style.color = 'green'
                 document.querySelector(`.${player.name}Cards`).style.background = 'green'
                 document.querySelector(`.${player.name}Cards`).classList.add('transparent')
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
+                document.querySelector(`.${player.name}Cards`).classList.add('rotate')
+                document.querySelector(`.${player.name}CurrentScore`).style.opacity = '100%'
+                addText(`.${player.name}CurrentScore`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
             }
 
             if (player.sum > 21) {
-                // document.querySelector(`.currentScore${player.name}`).style.color = 'gray'
+                // document.querySelector(`.${player.name}CurrentScore`).style.color = 'gray'
                 document.querySelector(`.${player.name}Cards`).style.background = 'gray'
-                document.querySelector(`.${player.name}Cards`).classList.add('transparent')
-                addText(`.currentScore${player.name}`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
+                // document.querySelector(`.${player.name}Cards`).classList.add('transparent')
+                document.querySelector(`.${player.name}Cards`).classList.add('rotate')
+                document.querySelector(`.${player.name}CurrentScore`).style.opacity = '100%'
+                addText(`.${player.name}CurrentScore`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
                 player.inGame = false
             }
         }
