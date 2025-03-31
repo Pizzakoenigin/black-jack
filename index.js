@@ -135,9 +135,11 @@ function createGamefield(currentDeck, players) {
             let selector = players[indexPlayer].hand[players[indexPlayer].hand.length - 1]
             createCard(players[indexPlayer], selector)
             checkForWinner(players, currentDeck)
+            
         }
 
         checkIndexPlayer()
+        checkForLastPlayer(players, indexPlayer)
 
         if (currentDeck.length == 0) {
             addText('.playfield', 'deck is empty')
@@ -149,28 +151,9 @@ function createGamefield(currentDeck, players) {
 
     document.querySelector('.endRound').addEventListener('click', () => {
         // check nur noch ein spieler übrig. spieler gewinnt
-
-
-        let activePlayers = 0
-
-        for (let i = 0; i < players.length; i++) {
-            if (players[i].inGame) {
-                activePlayers++
-            }
-        }
-
-        if (activePlayers == 1 && players[indexPlayer].inGame) {
-            players[indexPlayer].score++
-            players[indexPlayer].inGame = false
-            document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
-            document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
-            document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
-            document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
-
-            addText(`.${players[indexPlayer].name}CurrentScore`, `${players[indexPlayer].name} has ${players[indexPlayer].sum} points. has won! player score: ${players[indexPlayer].score}`)
-        }
-
         checkIndexPlayer()
+        checkForLastPlayer()
+        
 
 
     })
@@ -238,7 +221,7 @@ function createGamefield(currentDeck, players) {
 
 }
 
-function checkForWinner(players, currentDeck) {
+function checkForWinner(players) {
     players.forEach((player) => {
         if (player.inGame) {
             player.sum = 0
@@ -270,6 +253,29 @@ function checkForWinner(players, currentDeck) {
 
 
     })
+}
+
+function checkForLastPlayer(players, indexPlayer) {
+    let activePlayers = 0
+
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].inGame) {
+            activePlayers++
+        }
+    }
+    console.log(activePlayers, indexPlayer);
+    
+
+    if (activePlayers == 1 && players[indexPlayer].inGame) {
+        players[indexPlayer].score++
+        players[indexPlayer].inGame = false
+        document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
+        document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
+        document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
+        document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
+
+        addText(`.${players[indexPlayer].name}CurrentScore`, `${players[indexPlayer].name} is the last active player and get's a point! player score: ${players[indexPlayer].score}`)
+    }
 }
 
 
