@@ -98,8 +98,6 @@ function createGamefield(currentDeck, players) {
     createDOMElement('.cardDeckContainer', 'button', 'cardDeck', false);
     createDOMElement('.cardDeckContainer', 'p', 'cardDeckLabel', 'Draw a card')
     createDOMElement('.gameButtons', 'button', 'endRound', "Don't draw a card and leave hand")
-
-
     createDOMElement('.playfield', 'div', 'playersCards', false)
 
     players.forEach((player) => {
@@ -126,7 +124,6 @@ function createGamefield(currentDeck, players) {
     document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
     document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
 
-
     document.querySelector('.cardDeck').addEventListener('click', () => {
         addText(`.${players[indexPlayer].name}Turn`, `${players[indexPlayer].name}`)
 
@@ -144,17 +141,12 @@ function createGamefield(currentDeck, players) {
         if (currentDeck.length == 0) {
             addText('.playfield', 'deck is empty')
         }
-
-
-
     })
 
     document.querySelector('.endRound').addEventListener('click', () => {
         // check nur noch ein spieler übrig. spieler gewinnt
         checkIndexPlayer()
         checkForLastPlayer()
-        
-
 
     })
 
@@ -250,8 +242,6 @@ function checkForWinner(players) {
                 player.inGame = false
             }
         }
-
-
     })
 }
 
@@ -263,8 +253,6 @@ function checkForLastPlayer(players, indexPlayer) {
             activePlayers++
         }
     }
-    console.log(activePlayers, indexPlayer);
-    
 
     if (activePlayers == 1 && players[indexPlayer].inGame) {
         players[indexPlayer].score++

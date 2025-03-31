@@ -14,8 +14,6 @@ input:invalid {
   border: 3px solid red;
 }
 
-.container {}
-
 .playfield {
   background-color: var(--background);
   border-radius: 1em;
@@ -127,11 +125,6 @@ input:hover {
   margin: 0 auto 0 auto;
 }
 
-.cardDeck:hover {
-  /* transform: perspective(1500px ) rotateY(20deg); */
-
-}
-
 .transparent .card {
   opacity: 50%;
 
@@ -164,7 +157,6 @@ input:hover {
 
 .card-front {
   background: url(cards/backsideCard.jpg);
-
   background-size: contain;
 }
 
@@ -188,39 +180,8 @@ input:hover {
 
 /* Style the back side */
 .card-back {
-  /* background-color: dodgerblue;
-    color: white; */
   transform: rotateY(180deg);
-
-
   border-radius: 0.5em;
   background-size: contain !important;
   background-repeat: no-repeat !important;
-
 }
-
-
-/* .card-back {
-    width: calc(63mm/2);
-    height: calc(88mm/2);
-    background: url(cards/backsideCard.jpg);
-    border-radius: 0.5em;
-    background-size: contain; 
-    transform: perspective(1500px ) rotateY(0deg);
-    filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.591));
-    transition: transform 0.5s ease 0s;
-    border: 1px solid rgba(165, 165, 165, 0.4);
-}
-
-.card-back:hover {
-    transform: perspective(1500px ) rotateY(20deg);
-
-} */
-
-
-.square {
-
-  /* border: rgb(255, 255, 255) solid 1px */
-}
-
-input {}
