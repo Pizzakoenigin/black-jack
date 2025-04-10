@@ -227,15 +227,16 @@ function checkForWinner(players) {
             if (player.sum == 21) {
                 player.score++
                 player.inGame = false
-                document.querySelector(`.${player.name}Cards`).style.background = 'green'
-                document.querySelector(`.${player.name}Cards`).classList.add('transparent')
+                document.querySelector(`.${player.name}Cards`).style.background = 'rgba(58, 222, 64, 0.4)'
+                // document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 document.querySelector(`.${player.name}Cards`).classList.add('rotate')
                 document.querySelector(`.${player.name}CurrentScore`).style.opacity = '100%'
                 addText(`.${player.name}CurrentScore`, `${player.name} has ${player.sum} points. has won! player score: ${player.score}`)
             }
 
             if (player.sum > 21) {
-                document.querySelector(`.${player.name}Cards`).style.background = 'gray'
+                document.querySelector(`.${player.name}Cards`).style.background = 'rgba(77, 77, 77, 0.1)'
+                document.querySelector(`.${player.name}Cards`).classList.add('transparent')
                 document.querySelector(`.${player.name}Cards`).classList.add('rotate')
                 document.querySelector(`.${player.name}CurrentScore`).style.opacity = '100%'
                 addText(`.${player.name}CurrentScore`, `${player.name} has ${player.sum} points. ${player.name} lost. player score: ${player.score} `)
@@ -257,8 +258,8 @@ function checkForLastPlayer(players, indexPlayer) {
     if (activePlayers == 1 && players[indexPlayer].inGame) {
         players[indexPlayer].score++
         players[indexPlayer].inGame = false
-        document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'green'
-        document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
+        document.querySelector(`.${players[indexPlayer].name}Cards`).style.background = 'rgba(58, 222, 64, 0.4)'
+        // document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('transparent')
         document.querySelector(`.${players[indexPlayer].name}Cards`).classList.add('rotate')
         document.querySelector(`.${players[indexPlayer].name}CurrentScore`).style.opacity = '100%'
 
